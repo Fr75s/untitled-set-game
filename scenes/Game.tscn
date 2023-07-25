@@ -1,0 +1,23 @@
+[gd_scene load_steps=4 format=3 uid="uid://ggbue45e510n"]
+
+[ext_resource type="Script" path="res://scenes/Game.gd" id="1_dwvbj"]
+[ext_resource type="PackedScene" uid="uid://dwlvgy2g3ttio" path="res://scenes/card.tscn" id="2_73sbw"]
+[ext_resource type="Texture2D" uid="uid://pj500g3f1fgn" path="res://assets/background.svg" id="3_nm5xa"]
+
+[node name="Game" type="Node2D"]
+script = ExtResource("1_dwvbj")
+card_scene = ExtResource("2_73sbw")
+
+[node name="BackgroundLayer" type="CanvasLayer" parent="."]
+layer = -1
+
+[node name="TextureRect" type="TextureRect" parent="BackgroundLayer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_nm5xa")
+expand_mode = 1
+
+[node name="CardContainer" type="Node2D" parent="."]
