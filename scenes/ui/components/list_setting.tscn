@@ -1,0 +1,120 @@
+[gd_scene load_steps=8 format=3 uid="uid://bech8hkpv74it"]
+
+[ext_resource type="FontFile" uid="uid://b612p0xldmvjo" path="res://assets/font/OutfitVariable.ttf" id="2_kt8so"]
+[ext_resource type="Script" path="res://scenes/ui/components/list_setting.gd" id="2_ugbsn"]
+[ext_resource type="AudioStream" uid="uid://dmrnk4duhjju1" path="res://assets/sfx/select_ui.ogg" id="4_wtqdd"]
+
+[sub_resource type="FontVariation" id="FontVariation_lu8a6"]
+base_font = ExtResource("2_kt8so")
+variation_opentype = {
+2003265652: 400
+}
+spacing_top = 10
+spacing_bottom = 10
+
+[sub_resource type="LabelSettings" id="LabelSettings_i25x8"]
+font = SubResource("FontVariation_lu8a6")
+font_size = 24
+
+[sub_resource type="FontVariation" id="FontVariation_f4lci"]
+base_font = ExtResource("2_kt8so")
+variation_opentype = {
+2003265652: 400
+}
+
+[sub_resource type="LabelSettings" id="LabelSettings_hngms"]
+line_spacing = -4.0
+font = SubResource("FontVariation_f4lci")
+font_size = 18
+
+[node name="ListSetting" type="Control"]
+layout_mode = 3
+anchors_preset = 10
+anchor_right = 1.0
+grow_horizontal = 2
+size_flags_stretch_ratio = 0.8
+script = ExtResource("2_ugbsn")
+
+[node name="SettingNameMargins" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_top = -35.5
+offset_right = 184.0
+offset_bottom = 35.5
+grow_vertical = 2
+
+[node name="SettingName" type="Label" parent="SettingNameMargins"]
+layout_mode = 2
+text = "Setting Name"
+label_settings = SubResource("LabelSettings_i25x8")
+vertical_alignment = 1
+
+[node name="ListContainer" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+grow_horizontal = 0
+grow_vertical = 2
+
+[node name="ListLeftButton" type="Button" parent="ListContainer"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -24.0
+offset_top = -15.5
+offset_right = -144.0
+offset_bottom = 15.5
+grow_horizontal = 0
+grow_vertical = 2
+text = "←"
+flat = true
+
+[node name="ListDisplay" type="Label" parent="ListContainer"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -144.0
+offset_top = -29.0
+offset_right = -24.0
+offset_bottom = 29.0
+grow_horizontal = 0
+grow_vertical = 2
+size_flags_vertical = 1
+text = "
+"
+label_settings = SubResource("LabelSettings_hngms")
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+
+[node name="ListRightButton" type="Button" parent="ListContainer"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -24.0
+offset_top = -15.5
+offset_bottom = 15.5
+grow_horizontal = 0
+grow_vertical = 2
+text = "→"
+flat = true
+
+[node name="ActionPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("4_wtqdd")
+
+[connection signal="pressed" from="ListContainer/ListLeftButton" to="." method="_on_list_left_button_pressed"]
+[connection signal="pressed" from="ListContainer/ListRightButton" to="." method="_on_list_right_button_pressed"]

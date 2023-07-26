@@ -1,0 +1,72 @@
+[gd_scene load_steps=8 format=3 uid="uid://bvb04apxrqn3i"]
+
+[ext_resource type="Script" path="res://scripts/main_menu.gd" id="1_y1vn3"]
+[ext_resource type="Texture2D" uid="uid://brxviyjklsfkl" path="res://assets/ui/logo.png" id="2_y04rs"]
+[ext_resource type="PackedScene" uid="uid://ed0oxa1u4xkq" path="res://scenes/ui/title_screen_button.tscn" id="2_y7wvh"]
+[ext_resource type="Texture2D" uid="uid://b8k17jmqqcpfc" path="res://assets/ui/play_button.png" id="3_ekky3"]
+[ext_resource type="Texture2D" uid="uid://mjavyegoq67x" path="res://assets/ui/button_back.svg" id="4_tr12r"]
+[ext_resource type="Texture2D" uid="uid://dednic4df2ase" path="res://assets/ui/options_button.png" id="5_j1bqw"]
+[ext_resource type="Texture2D" uid="uid://drlp212vntioj" path="res://assets/ui/settings_to.png" id="7_yex4l"]
+
+[node name="MainMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_y1vn3")
+
+[node name="TextureRect" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.1
+anchor_right = 0.9
+offset_top = 20.0
+grow_horizontal = 2
+texture = ExtResource("2_y04rs")
+expand_mode = 5
+stretch_mode = 4
+
+[node name="PlayButton" parent="." instance=ExtResource("2_y7wvh")]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.225
+anchor_top = 1.0
+anchor_right = 0.775
+anchor_bottom = 1.0
+offset_top = -350.0
+offset_bottom = -350.0
+front_image = ExtResource("3_ekky3")
+back_image = ExtResource("4_tr12r")
+back_color = Color(0.968627, 0.34902, 0.482353, 1)
+
+[node name="OptionsButton" parent="." instance=ExtResource("2_y7wvh")]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.225
+anchor_top = 1.0
+anchor_right = 0.775
+anchor_bottom = 1.0
+offset_top = -175.0
+offset_bottom = -175.0
+front_image = ExtResource("5_j1bqw")
+back_image = ExtResource("4_tr12r")
+back_color = Color(0.666667, 0.454902, 1, 1)
+
+[node name="SettingsButton" type="TextureButton" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_top = 16.0
+offset_right = -16.0
+grow_horizontal = 0
+scale = Vector2(0.15, 0.15)
+pivot_offset = Vector2(256, 0)
+texture_normal = ExtResource("7_yex4l")
+stretch_mode = 0
+
+[connection signal="action_taken" from="PlayButton" to="." method="_on_play_button_action_taken"]
+[connection signal="action_taken" from="OptionsButton" to="." method="_on_options_button_action_taken"]
+[connection signal="pressed" from="SettingsButton" to="." method="_on_settings_button_pressed"]

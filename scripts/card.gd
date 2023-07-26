@@ -4,6 +4,8 @@ extends Sprite2D
 # Green: 0.4549019607843137, 1.0, 0.4549019607843137
 # Purple: 0.6666666666666666, 0.4549019607843137, 1.0
 
+@onready var global = get_node("/root/Globals")
+
 @export var color: int = 0
 @export var shape: int = 0
 @export var fill: int = 0
@@ -15,10 +17,11 @@ signal clicked
 
 # File name scheme: shape|fill|count
 
-var display_colors = ["#f7597b", "#7acc7a", "#aa74ff", "#74aaff"]
+@onready var display_colors = global.colors[global.settings["current_colors"]]
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	#display_colors = global.colors[global.settings["colors"]]
 	prepare_card()
 
 func prepare_card():
@@ -66,7 +69,6 @@ func position_card(num_rows: int, num_cols: int, row: int, col: int, instant: bo
 			tween.parallel().tween_property(self, "scale", Vector2(this_card_scale, this_card_scale), 0.5)
 	else:
 		# Disappear the cards when done, don't move them also
-		print("We're done here!")
 		var tween = create_tween()
 		tween.set_trans(Tween.TRANS_QUAD)
 		tween.tween_property(self, "scale", Vector2(0, 0), 0.5)
@@ -76,5 +78,9 @@ func position_card(num_rows: int, num_cols: int, row: int, col: int, instant: bo
 func _on_click_area_input_event(_viewport, event, _shape_idx):
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
+			# Actions upon clicking
+			if not(global.settings.mute_audio or global.settings.mute_sfx):
+				$ClickAudioPlayer.play()
+			
 			clicked.emit("%d%d%d%d" % [color, shape, fill, count])
 			#print("%d%d%d%d" % [color, shape, fill, count])

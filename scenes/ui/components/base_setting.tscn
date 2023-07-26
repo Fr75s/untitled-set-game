@@ -1,0 +1,44 @@
+[gd_scene load_steps=4 format=3 uid="uid://d508mspvu417"]
+
+[ext_resource type="FontFile" uid="uid://b612p0xldmvjo" path="res://assets/font/OutfitVariable.ttf" id="1_hqx5x"]
+
+[sub_resource type="FontVariation" id="FontVariation_lu8a6"]
+base_font = ExtResource("1_hqx5x")
+variation_opentype = {
+2003265652: 400
+}
+spacing_top = 10
+spacing_bottom = 10
+
+[sub_resource type="LabelSettings" id="LabelSettings_i25x8"]
+font = SubResource("FontVariation_lu8a6")
+font_size = 24
+
+[node name="BaseSetting" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 272.0
+offset_bottom = 71.0
+size_flags_stretch_ratio = 0.8
+
+[node name="SettingNameMargins" type="MarginContainer" parent="."]
+layout_mode = 2
+offset_right = 184.0
+offset_bottom = 71.0
+
+[node name="SettingName" type="Label" parent="SettingNameMargins"]
+layout_mode = 2
+text = "Setting Name"
+label_settings = SubResource("LabelSettings_i25x8")
+vertical_alignment = 1
+
+[node name="SettingActionMargins" type="MarginContainer" parent="."]
+layout_mode = 2
+offset_left = 232.0
+offset_right = 272.0
+offset_bottom = 71.0
+size_flags_horizontal = 10
+theme_override_constants/margin_left = 0
+theme_override_constants/margin_right = 40
+
+[node name="ActionPlayer" type="AudioStreamPlayer" parent="."]

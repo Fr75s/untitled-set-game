@@ -1,0 +1,64 @@
+[gd_scene load_steps=6 format=3 uid="uid://b1fchbwkp3kw7"]
+
+[ext_resource type="Script" path="res://scenes/ui/components/toggle_setting.gd" id="1_2m1ym"]
+[ext_resource type="FontFile" uid="uid://b612p0xldmvjo" path="res://assets/font/OutfitVariable.ttf" id="1_hqx5x"]
+[ext_resource type="AudioStream" uid="uid://dmrnk4duhjju1" path="res://assets/sfx/select_ui.ogg" id="3_4dee0"]
+
+[sub_resource type="FontVariation" id="FontVariation_lu8a6"]
+base_font = ExtResource("1_hqx5x")
+variation_opentype = {
+2003265652: 400
+}
+spacing_top = 10
+spacing_bottom = 10
+
+[sub_resource type="LabelSettings" id="LabelSettings_i25x8"]
+font = SubResource("FontVariation_lu8a6")
+font_size = 24
+
+[node name="ToggleSetting" type="Control"]
+layout_mode = 3
+anchors_preset = 10
+anchor_right = 1.0
+grow_horizontal = 2
+size_flags_stretch_ratio = 0.8
+script = ExtResource("1_2m1ym")
+
+[node name="SettingNameMargins" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_top = -35.5
+offset_right = 144.0
+offset_bottom = 35.5
+grow_vertical = 2
+
+[node name="SettingName" type="Label" parent="SettingNameMargins"]
+layout_mode = 2
+text = "Setting Name"
+label_settings = SubResource("LabelSettings_i25x8")
+vertical_alignment = 1
+
+[node name="SettingActionMargins" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -168.0
+offset_top = -12.0
+offset_bottom = 12.0
+grow_horizontal = 0
+grow_vertical = 2
+size_flags_horizontal = 10
+
+[node name="Toggle" type="CheckButton" parent="SettingActionMargins"]
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="ActionPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_4dee0")
+
+[connection signal="pressed" from="SettingActionMargins/Toggle" to="." method="_on_toggle_pressed"]

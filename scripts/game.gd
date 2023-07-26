@@ -1,5 +1,7 @@
 extends Node2D
 
+@onready var global = get_node("/root/Globals")
+
 @export var card_scene: PackedScene
 
 signal set_found
@@ -49,7 +51,12 @@ func prepare_game():
 		all_cards = all_cards_backup
 		current_cards = []
 		expended_cards = []
+		selected_cards = []
 		
+		for child in $CardContainer.get_children():
+			child.queue_free()
+		
+		print("Let's try that again.")
 		prepare_game()
 	else:
 		print("There's a set in there, don't worry.")
@@ -107,6 +114,9 @@ func on_card_clicked(combo: String):
 func process_set_viability():
 	if is_collection_set(selected_cards):
 		var previous_cards = current_cards.slice(0)
+		
+		if not(global.settings.mute_audio or global.settings.mute_sfx):
+			$Audio/CorrectAudio.play()
 		
 		var first_index = -1
 		for combo in selected_cards:
@@ -187,23 +197,42 @@ func process_set_viability():
 					var this_row = i / total_columns
 					var this_col = i % total_columns
 					$CardContainer.get_node(current_cards[i]).position_card(num_rows, total_columns, this_row, this_col)
-			else:
-				for i in range(len(current_cards)):
-					$CardContainer.get_node(current_cards[i]).position_card(total_rows, total_columns, 0, 0, false, true)
-				
-				print("Well played.")
+		
+		# Run game over section when no cards are left and no sets can be made.
+		if game_over:
+			for i in range(len(current_cards)):
+				$CardContainer.get_node(current_cards[i]).position_card(total_rows, total_columns, 0, 0, false, true)
+			
+			await get_tree().create_timer(0.75).timeout
+			
+			if not(global.settings.mute_audio or global.settings.mute_sfx):
+				$Audio/WinAudio.play()
+			$UILayer/EndScreen.visible = true
+			
+			all_cards = []
+			expended_cards = []
+			current_cards = []
+			selected_cards = []
+			
+			for child in $CardContainer.get_children():
+				child.queue_free()
 		
 		print("Next set!")
 		
 		# AUTOPLAY
-		#var viable_combos = is_current_cards_viable()
-		#if is_current_cards_viable():
-		#	await get_tree().create_timer(0.75).timeout
-		#	on_card_clicked(viable_combos[0])
-		#	on_card_clicked(viable_combos[1])
-		#	on_card_clicked(viable_combos[2])
+		if global.DEBUG_AUTOPLAY:
+			var viable_combos = is_current_cards_viable()
+			if is_current_cards_viable():
+				print("CARDS LEFT: %d" % len(all_cards))
+				await get_tree().create_timer(0.5).timeout
+				on_card_clicked(viable_combos[0])
+				on_card_clicked(viable_combos[1])
+				on_card_clicked(viable_combos[2])
 
 	else:
+		if not(global.settings.mute_audio or global.settings.mute_sfx):
+			$Audio/IncorrectAudio.play()
+		
 		for combo in selected_cards:
 			$CardContainer.get_node(combo).modulate = Color(1.0, 1.0, 1.0)
 			$CardContainer.get_node(combo).selected = false
@@ -211,7 +240,7 @@ func process_set_viability():
 		selected_cards = []
 		print("not a set")
 
-func is_current_cards_viable() -> bool:
+func is_current_cards_viable():
 	# We just need to find 1 set
 	for i in range(len(current_cards)):
 		for j in range(i + 1, len(current_cards)):
@@ -233,8 +262,11 @@ func is_current_cards_viable() -> bool:
 					# A set is found! Immediately leave.
 					print("the set that's found is [%s %s %s]" % [combo1, combo2, combo3])
 					print("items are at indices [%d, %d, %d]" % [i, j, k])
-					return true # Comment to AUTOPLAY
-					# Uncomment to AUTOPLAY -> return [combo1, combo2, combo3]
+					#return true # Comment to AUTOPLAY
+					if global.DEBUG_AUTOPLAY:
+						return [combo1, combo2, combo3] #<- Uncomment to AUTOPLAY
+					else:
+						return true
 
 	# No set found, that's not good.
 	return false
@@ -255,3 +287,18 @@ func is_collection_set(collection) -> bool:
 func _process(_delta):
 	var new_y = (get_viewport_rect().size.y - viewport_height) / 2
 	$CardContainer.position.y = new_y
+
+
+
+func _on_restart_button_pressed():
+	$UILayer/EndScreen.visible = false
+	form_randomization()
+	prepare_game()
+
+func _on_main_menu_button_pressed():
+	print("Returning to the Main Menu")
+	get_tree().change_scene_to_file("res://scenes/ui/main_menu.tscn")
+
+func _on_back_button_pressed():
+	print("Returning to the Main Menu")
+	get_tree().change_scene_to_file("res://scenes/ui/main_menu.tscn")
