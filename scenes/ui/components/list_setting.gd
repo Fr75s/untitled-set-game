@@ -14,13 +14,13 @@ func _ready():
 	setting_list = global.setting_options[setting_list_id]
 	setting_list_index = setting_list.find(global.settings[setting_id])
 	
-	$SettingNameMargins/SettingName.text = setting_name
+	$SettingName.text = setting_name
 	update_display()
 
 
 
 func update_display():
-	$ListContainer/ListDisplay.text = global.settings[setting_id]
+	$ListContainer/ListDisplay.text = str(global.settings[setting_id])
 
 func _on_list_left_button_pressed():
 	if not(global.settings.mute_audio or global.settings.mute_sfx):

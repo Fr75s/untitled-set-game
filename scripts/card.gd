@@ -19,9 +19,12 @@ signal clicked
 
 @onready var display_colors = global.colors[global.settings["current_colors"]]
 
-# Called when the node enters the scene tree for the first time.
+var position_card_queue = []
+
 func _ready():
 	#display_colors = global.colors[global.settings["colors"]]
+	for i in position_card_queue:
+		position_card(i[0], i[1], i[2], i[3], i[4], i[5])
 	prepare_card()
 
 func prepare_card():
@@ -36,7 +39,7 @@ func toggle_selected(_combo):
 		modulate = Color(1.0, 1.0, 1.0)
 		selected = false
 	else:
-		modulate = Color(0.6, 0.8, 1.0)
+		modulate = Color(0.7, 0.9, 1.0)
 		selected = true
 
 
@@ -72,6 +75,9 @@ func position_card(num_rows: int, num_cols: int, row: int, col: int, instant: bo
 		var tween = create_tween()
 		tween.set_trans(Tween.TRANS_QUAD)
 		tween.tween_property(self, "scale", Vector2(0, 0), 0.5)
+
+func position_card_when_ready(num_rows: int, num_cols: int, row: int, col: int, instant: bool = false, finished: bool = false):
+	position_card_queue.append([num_rows, num_cols, row, col, instant, finished])
 
 
 

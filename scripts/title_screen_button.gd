@@ -40,7 +40,7 @@ func toggle_focus(to: bool):
 		tween.tween_property($ButtonImage, "rotation_degrees", 0, tween_duration)
 		focused = false
 	else:
-		tween.tween_property($ButtonImage, "rotation_degrees", -2, tween_duration)
+		tween.tween_property($ButtonImage, "rotation_degrees", -1.5, tween_duration)
 		focused = true
 		
 		# Delay triggering action

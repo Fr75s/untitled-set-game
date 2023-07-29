@@ -8,7 +8,7 @@ extends Control
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	$SettingNameMargins/SettingName.text = setting_name
-	$SettingActionMargins/Toggle.button_pressed = global.settings[setting_id]
+	$Toggle.button_pressed = global.settings[setting_id]
 
 func _on_toggle_pressed():
 	if not(global.settings.mute_audio or global.settings.mute_sfx):

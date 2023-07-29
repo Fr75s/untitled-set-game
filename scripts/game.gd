@@ -6,30 +6,115 @@ extends Node2D
 
 signal set_found
 
+var game_mode = ""
+var game_complexity = 3
+
+var cpu = false
+
+# Card Variables
 var all_cards = []
 var expended_cards = []
 
 var current_cards = []
 var selected_cards = []
 
-# Called when the node enters the scene tree for the first time.
-func _ready():
-	#ProjectSettings.set_setting("rendering/environment/defaults/default_clear_color", Color("#16171a"))
-	form_randomization()
-	prepare_game()
+# Completion Counts
+var sets_completed = 0
+var decks_completed = 0
+
+var max_sets = 0
+var max_decks = 0
 
 var total_rows = 4
-var total_columns = 3
+var total_columns = game_complexity
 
 var viewport_height = ProjectSettings.get_setting("display/window/size/viewport_height")
 var viewport_width = ProjectSettings.get_setting("display/window/size/viewport_width")
 
-var num_colors = 3
-var num_shapes = 3
-var num_fills = 3
-var num_counts = 3
+var num_colors = game_complexity
+var num_shapes = game_complexity
+var num_fills = game_complexity
+var num_counts = game_complexity
 
 var num_variants = [num_colors, num_shapes, num_fills, num_counts]
+
+
+
+# Starting Functions
+func _ready():
+	game_mode = global.game_mode
+	
+	match game_mode:
+		"single":
+			$UILayer/PregameScreen/PregameTitle.text = "Singleplayer"
+			$UILayer/PregameScreen/SettingsContainer/SingleSettings.visible = true
+		"speed":
+			$UILayer/PregameScreen/PregameTitle.text = "Speedrun"
+			$UILayer/PregameScreen/SettingsContainer/SpeedrunSettings.visible = true
+	
+	$UILayer/PregameScreen.visible = true
+
+var initial_time = 0
+
+func _on_start_button_pressed():
+	# Play Sound
+	if not(global.settings.mute_audio or global.settings.mute_sfx):
+		$UILayer/UINodeAudio.play()
+	
+	$UILayer/PregameScreen.visible = false
+	
+	start_game()
+
+func start_game():
+	# Game Features
+	#game_complexity = global.settings["game_complexity"]
+	
+	#num_colors = game_complexity
+	#num_shapes = game_complexity
+	#num_fills = game_complexity
+	#num_counts = game_complexity
+	
+	#total_columns = game_complexity
+	
+	#num_variants = [num_colors, num_shapes, num_fills, num_counts]
+	
+	# Mode Specific Features
+	match game_mode:
+		"single":
+			pass
+		"speed":
+			$UILayer/IngameUI/Speedrun.visible = true
+			$UILayer/IngameUI/Speedrun/GameTimer.label_settings.font_color = Color("#f2f6ff")
+			$UILayer/EndScreen/FinishLabel.text = "Speedrun Complete!"
+			
+			initial_time = Time.get_ticks_msec()
+			
+			match global.settings.speedrun_mode:
+				"1 Deck":
+					max_decks = 1
+				"2 Decks":
+					max_decks = 2
+				"5 Decks":
+					max_decks = 5
+				"5 Sets":
+					max_sets = 5
+				"10 Sets":
+					max_sets = 10
+				"15 Sets":
+					max_sets = 15
+				"50 Sets":
+					max_sets = 50
+	
+	# Hide Pregame UI, Show Ingame UI
+	$UILayer/IngameUI.visible = true
+	
+	# Start Game
+	form_randomization()
+	prepare_game()
+
+
+
+
 
 func form_randomization():
 	for c in range(num_colors):
@@ -38,25 +123,36 @@ func form_randomization():
 				for k in range(num_counts):
 					all_cards.append("%d%d%d%d" % [c, s, f, k])
 
-func prepare_game():
-	var all_cards_backup = all_cards.slice(0)
-	
+func all_cards_integrity_check():
+	for c in range(num_colors):
+		for s in range(num_shapes):
+			for f in range(num_fills):
+				for k in range(num_counts):
+					var combo = "%d%d%d%d" % [c, s, f, k]
+					if (all_cards.find(combo) < 0):
+						push_error("Integrity Check failed with %s" % combo)
+						return
+	print("All good")
+	return
+
+func prepare_game(slide_in: bool = false):
 	for row in range(total_rows):
 		for col in range(total_columns):
 			var this_card = card_scene.instantiate()
-			prepare_new_card(this_card, row, col)
+			prepare_new_card(this_card, row, col, total_rows, not(slide_in))
 			
 	
 	if !is_current_cards_viable():
-		all_cards = all_cards_backup
+		all_cards = []
 		current_cards = []
 		expended_cards = []
 		selected_cards = []
 		
 		for child in $CardContainer.get_children():
-			child.queue_free()
+			child.free()
 		
 		print("Let's try that again.")
+		form_randomization()
 		prepare_game()
 	else:
 		print("There's a set in there, don't worry.")
@@ -76,7 +172,7 @@ func generate_new_card_props() -> String:
 	
 	return card_props
 
-func prepare_new_card(card, row, col, num_rows = total_rows):
+func prepare_new_card(card, row: int, col: int, num_rows: int = total_rows, no_move: bool = false):
 	# Number of spaces is (value) + 1
 	#var this_card_x = (viewport_width / (total_columns + 1)) * (col + 1)
 	#var this_card_y = (viewport_height / (total_rows + 1)) * (row + 1)
@@ -87,17 +183,30 @@ func prepare_new_card(card, row, col, num_rows = total_rows):
 	if (card_props != "-"):
 		card.name = card_props
 		
-		card.color = card_props[0] as int
-		card.shape = card_props[1] as int
-		card.fill = card_props[2] as int
-		card.count = card_props[3] as int
+		card.color = int(card_props[0])
+		card.shape = int(card_props[1])
+		card.fill = int(card_props[2])
+		card.count = int(card_props[3])
 		
-		card.position_card(num_rows, total_columns, row, col, true)
+		if no_move:
+			card.position_card(num_rows, total_columns, row, col, true)
+		else:
+			card.position = Vector2(viewport_width, viewport_height)
+			card.scale = Vector2(0.15, 0.15)
+			card.position_card_when_ready(num_rows, total_columns, row, col)
 		
 		card.clicked.connect(card.toggle_selected)
 		card.clicked.connect(on_card_clicked)
 		
+		#print("Adding Card %s" % card.name)
 		$CardContainer.add_child(card)
+		
+		#var out = ""
+		#for child in $CardContainer.get_children():
+		#	out += child.name + ";"
+		#print(out)
+	else:
+		card.queue_free()
 
 func on_card_clicked(combo: String):
 	if (combo in selected_cards):
@@ -106,7 +215,8 @@ func on_card_clicked(combo: String):
 		selected_cards.append(combo)
 		print(selected_cards)
 	
-	if len(selected_cards) == 3:
+	# Check if selected cards is game complexity
+	if len(selected_cards) == game_complexity:
 		process_set_viability()
 
 
@@ -118,6 +228,19 @@ func process_set_viability():
 		if not(global.settings.mute_audio or global.settings.mute_sfx):
 			$Audio/CorrectAudio.play()
 		
+		# Speedrun Progress Processing
+		sets_completed += 1
+		
+		var speedrun_progress_value = 0
+		match global.settings.speedrun_mode:
+			"1 Deck", "2 Decks", "5 Decks":
+				var current_deck_progress = (len(expended_cards) * 1.0 / (num_colors * num_shapes * num_fills * num_counts))
+				speedrun_progress_value = (((current_deck_progress + decks_completed) / max_decks)) * 100
+			"5 Sets", "10 Sets", "15 Sets", "50 Sets":
+				speedrun_progress_value = (sets_completed * 1.0 / max_sets) * 100
+		$UILayer/IngameUI/Speedrun/SpeedrunProgress.value = speedrun_progress_value
+		
+		# Get rid of the selected set, add a new set in place
 		var first_index = -1
 		for combo in selected_cards:
 			$CardContainer.remove_child($CardContainer.get_node(combo))
@@ -183,6 +306,11 @@ func process_set_viability():
 				game_over = true
 				break
 		
+		# Speedrun Game Over Checks
+		if (game_mode == "speed"):
+			if (max_sets > 0 and sets_completed >= max_sets):
+				game_over = true
+		
 		# Reposition cards that may not be in the exact right place if overflow did occur
 		for i in range(first_index):
 			var this_row = i / total_columns
@@ -203,11 +331,21 @@ func process_set_viability():
 			for i in range(len(current_cards)):
 				$CardContainer.get_node(current_cards[i]).position_card(total_rows, total_columns, 0, 0, false, true)
 			
-			await get_tree().create_timer(0.75).timeout
+			decks_completed += 1
 			
-			if not(global.settings.mute_audio or global.settings.mute_sfx):
-				$Audio/WinAudio.play()
-			$UILayer/EndScreen.visible = true
+			# Timer Stop
+			var speedrun_complete = false
+			if (game_mode == "speed"):
+				if (max_decks > 0 and decks_completed >= max_decks):
+					speedrun_complete = true
+					$UILayer/IngameUI/Speedrun/GameTimer.label_settings.font_color = Color("#74aaff")
+					initial_time = 0
+				if (max_sets > 0 and sets_completed >= max_sets):
+					speedrun_complete = true
+					$UILayer/IngameUI/Speedrun/GameTimer.label_settings.font_color = Color("#74aaff")
+					initial_time = 0
+			
+			await get_tree().create_timer(0.75).timeout
 			
 			all_cards = []
 			expended_cards = []
@@ -215,12 +353,23 @@ func process_set_viability():
 			selected_cards = []
 			
 			for child in $CardContainer.get_children():
-				child.queue_free()
-		
-		print("Next set!")
+				child.free()
+			
+			if (game_mode == "single") or (game_mode == "speed" and speedrun_complete):
+				if not(global.settings.mute_audio or global.settings.mute_sfx):
+					$Audio/WinAudio.play()
+				
+				$UILayer/IngameUI/Speedrun/SpeedrunProgress.visible = false
+				$UILayer/EndScreen.visible = true
+			else:
+				# Prepare another deck
+				form_randomization()
+				prepare_game(true)
+		else:
+			print("Next set!")
 		
 		# AUTOPLAY
-		if global.DEBUG_AUTOPLAY:
+		if global.DEBUG_AUTOPLAY and not(game_over):
 			var viable_combos = is_current_cards_viable()
 			if is_current_cards_viable():
 				print("CARDS LEFT: %d" % len(all_cards))
@@ -262,12 +411,11 @@ func is_current_cards_viable():
 					# A set is found! Immediately leave.
 					print("the set that's found is [%s %s %s]" % [combo1, combo2, combo3])
 					print("items are at indices [%d, %d, %d]" % [i, j, k])
-					#return true # Comment to AUTOPLAY
 					if global.DEBUG_AUTOPLAY:
-						return [combo1, combo2, combo3] #<- Uncomment to AUTOPLAY
+						return [combo1, combo2, combo3]
 					else:
 						return true
-
+	
 	# No set found, that's not good.
 	return false
 
@@ -275,7 +423,7 @@ func is_collection_set(collection) -> bool:
 	for p in range(4):
 		var properties_sum = 0
 		for n in range(len(collection)):
-			properties_sum += collection[n][p] as int
+			properties_sum += int(collection[n][p])
 		
 		if properties_sum % num_variants[p] != 0:
 			return false
@@ -285,15 +433,24 @@ func is_collection_set(collection) -> bool:
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta):
+	# Process Game size changes
 	var new_y = (get_viewport_rect().size.y - viewport_height) / 2
 	$CardContainer.position.y = new_y
+	
+	# Timer
+	if (game_mode == "speed") and (initial_time > 0):
+		var current_time = Time.get_ticks_msec() - initial_time
+		var formatted_time = global.format_time(current_time)
+		$UILayer/IngameUI/Speedrun/GameTimer.text = formatted_time[0] + ":" + formatted_time[1] + "." + formatted_time[2]
 
 
 
 func _on_restart_button_pressed():
+	if not(global.settings.mute_audio or global.settings.mute_sfx):
+		$UILayer/UINodeAudio.play()
+	
 	$UILayer/EndScreen.visible = false
-	form_randomization()
-	prepare_game()
+	start_game()
 
 func _on_main_menu_button_pressed():
 	print("Returning to the Main Menu")

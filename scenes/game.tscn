@@ -1,13 +1,47 @@
-[gd_scene load_steps=11 format=3 uid="uid://ggbue45e510n"]
+[gd_scene load_steps=21 format=3 uid="uid://ggbue45e510n"]
 
 [ext_resource type="Script" path="res://scripts/game.gd" id="1_6rj2t"]
 [ext_resource type="PackedScene" uid="uid://dwlvgy2g3ttio" path="res://scenes/objects/card.tscn" id="2_g428w"]
 [ext_resource type="Texture2D" uid="uid://pj500g3f1fgn" path="res://assets/background.svg" id="3_5j4mx"]
 [ext_resource type="FontFile" uid="uid://b612p0xldmvjo" path="res://assets/font/OutfitVariable.ttf" id="4_ug63r"]
+[ext_resource type="FontFile" uid="uid://br6rlljmte24h" path="res://assets/font/JetBrainsMono.ttf" id="4_vk20l"]
 [ext_resource type="Texture2D" uid="uid://hduroyyibmnp" path="res://assets/ui/settings_back.png" id="4_vopya"]
 [ext_resource type="AudioStream" uid="uid://d2763j6qe8j2f" path="res://assets/sfx/correct.ogg" id="5_681r2"]
+[ext_resource type="Texture2D" uid="uid://cgn7bt8ette4m" path="res://assets/ui/menu_buttons/begin_game.png" id="5_wriej"]
+[ext_resource type="Texture2D" uid="uid://cyfjpl6h5cufc" path="res://assets/ui/menu_buttons/begin_game_p.png" id="6_74h2h"]
 [ext_resource type="AudioStream" uid="uid://ctoxlvjmscxsa" path="res://assets/sfx/incorrect.ogg" id="6_7663o"]
 [ext_resource type="AudioStream" uid="uid://beb2feidydg0u" path="res://assets/sfx/win.ogg" id="7_b5iy3"]
+[ext_resource type="PackedScene" uid="uid://bech8hkpv74it" path="res://scenes/ui/components/list_setting.tscn" id="7_jlv6a"]
+[ext_resource type="AudioStream" uid="uid://dmrnk4duhjju1" path="res://assets/sfx/select_ui.ogg" id="8_p4d23"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_jtryd"]
+line_spacing = 0.0
+font = ExtResource("4_vk20l")
+font_size = 24
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rln0q"]
+bg_color = Color(0.14902, 0.156863, 0.176471, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_e8diu"]
+bg_color = Color(0.94902, 0.964706, 1, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="FontVariation" id="FontVariation_b7nu4"]
+base_font = ExtResource("4_ug63r")
+variation_opentype = {
+2003265652: 750
+}
+
+[sub_resource type="LabelSettings" id="LabelSettings_4w483"]
+font = SubResource("FontVariation_b7nu4")
+font_size = 42
 
 [sub_resource type="FontVariation" id="FontVariation_swgte"]
 base_font = ExtResource("4_ug63r")
@@ -40,13 +74,131 @@ expand_mode = 1
 
 [node name="UILayer" type="CanvasLayer" parent="."]
 
-[node name="BackButton" type="TextureButton" parent="UILayer"]
-offset_left = 16.0
-offset_top = 16.0
-offset_right = 272.0
-offset_bottom = 272.0
-scale = Vector2(0.15, 0.15)
-texture_normal = ExtResource("4_vopya")
+[node name="IngameUI" type="Control" parent="UILayer"]
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Speedrun" type="Control" parent="UILayer/IngameUI"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="GameTimer" type="Label" parent="UILayer/IngameUI/Speedrun"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.975
+anchor_right = 0.5
+anchor_bottom = 0.975
+offset_left = -63.0
+offset_top = -33.0
+offset_right = 63.0
+grow_horizontal = 2
+grow_vertical = 0
+text = "00:00.000"
+label_settings = SubResource("LabelSettings_jtryd")
+horizontal_alignment = 1
+vertical_alignment = 2
+
+[node name="SpeedrunProgress" type="ProgressBar" parent="UILayer/IngameUI/Speedrun"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.2
+anchor_top = 0.98
+anchor_right = 0.8
+anchor_bottom = 0.98
+offset_bottom = 4.0
+grow_vertical = 2
+theme_override_styles/background = SubResource("StyleBoxFlat_rln0q")
+theme_override_styles/fill = SubResource("StyleBoxFlat_e8diu")
+rounded = true
+show_percentage = false
+
+[node name="PregameScreen" type="Control" parent="UILayer"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PregameTitle" type="Label" parent="UILayer/PregameScreen"]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 0.1
+offset_bottom = 26.0
+grow_horizontal = 2
+text = "Singleplayer
+"
+label_settings = SubResource("LabelSettings_4w483")
+horizontal_alignment = 1
+vertical_alignment = 2
+
+[node name="StartButton" type="TextureButton" parent="UILayer/PregameScreen"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.25
+anchor_top = 0.85
+anchor_right = 0.75
+anchor_bottom = 1.0
+grow_horizontal = 2
+texture_normal = ExtResource("5_wriej")
+texture_pressed = ExtResource("6_74h2h")
+ignore_texture_size = true
+stretch_mode = 4
+
+[node name="SettingsContainer" type="VBoxContainer" parent="UILayer/PregameScreen"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.1
+anchor_top = 0.5
+anchor_right = 0.9
+anchor_bottom = 0.5
+offset_top = -2.0
+offset_bottom = 2.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 50
+
+[node name="SingleSettings" type="Control" parent="UILayer/PregameScreen/SettingsContainer"]
+layout_mode = 2
+
+[node name="CPUSetting" parent="UILayer/PregameScreen/SettingsContainer/SingleSettings" instance=ExtResource("7_jlv6a")]
+visible = false
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_bottom = 0.5
+grow_vertical = 2
+setting_name = "CPU Difficulty"
+setting_id = "cpu_difficulty"
+setting_list_id = "cpu_difficulty"
+
+[node name="SpeedrunSettings" type="Control" parent="UILayer/PregameScreen/SettingsContainer"]
+visible = false
+layout_mode = 2
+
+[node name="SpeedrunModeSetting" parent="UILayer/PregameScreen/SettingsContainer/SpeedrunSettings" instance=ExtResource("7_jlv6a")]
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_bottom = 0.5
+grow_vertical = 2
+setting_name = "Mode"
+setting_id = "speedrun_mode"
+setting_list_id = "speedrun_mode"
 
 [node name="EndScreen" type="Control" parent="UILayer"]
 visible = false
@@ -56,6 +208,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 1
 
 [node name="FinishLabel" type="Label" parent="UILayer/EndScreen"]
 layout_mode = 1
@@ -103,6 +256,18 @@ grow_horizontal = 2
 grow_vertical = 2
 text = "Give me another deck"
 
+[node name="BackButton" type="TextureButton" parent="UILayer"]
+offset_left = 16.0
+offset_top = 16.0
+offset_right = 272.0
+offset_bottom = 272.0
+scale = Vector2(0.15, 0.15)
+mouse_default_cursor_shape = 2
+texture_normal = ExtResource("4_vopya")
+
+[node name="UINodeAudio" type="AudioStreamPlayer" parent="UILayer"]
+stream = ExtResource("8_p4d23")
+
 [node name="Audio" type="Node" parent="."]
 
 [node name="CorrectAudio" type="AudioStreamPlayer" parent="Audio"]
@@ -117,6 +282,7 @@ volume_db = -5.0
 stream = ExtResource("7_b5iy3")
 volume_db = -5.0
 
-[connection signal="pressed" from="UILayer/BackButton" to="." method="_on_back_button_pressed"]
+[connection signal="pressed" from="UILayer/PregameScreen/StartButton" to="." method="_on_start_button_pressed"]
 [connection signal="pressed" from="UILayer/EndScreen/MainMenuButton" to="." method="_on_main_menu_button_pressed"]
 [connection signal="pressed" from="UILayer/EndScreen/RestartButton" to="." method="_on_restart_button_pressed"]
+[connection signal="pressed" from="UILayer/BackButton" to="." method="_on_back_button_pressed"]
