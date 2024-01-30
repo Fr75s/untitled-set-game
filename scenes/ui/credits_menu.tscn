@@ -1,0 +1,89 @@
+[gd_scene load_steps=7 format=3 uid="uid://bfi7xnnqexehd"]
+
+[ext_resource type="Script" path="res://scripts/credits_menu.gd" id="1_ffjy2"]
+[ext_resource type="FontFile" uid="uid://b612p0xldmvjo" path="res://assets/font/OutfitVariable.ttf" id="2_2571u"]
+[ext_resource type="PackedScene" uid="uid://dubepth7oe6l6" path="res://scenes/ui/components/credit.tscn" id="3_gqm8p"]
+[ext_resource type="Texture2D" uid="uid://hduroyyibmnp" path="res://assets/ui/settings_back.png" id="5_42qyd"]
+
+[sub_resource type="FontVariation" id="FontVariation_ljlk5"]
+base_font = ExtResource("2_2571u")
+variation_opentype = {
+2003265652: 150
+}
+spacing_glyph = 2
+spacing_top = 50
+spacing_bottom = -25
+
+[sub_resource type="LabelSettings" id="LabelSettings_x7c5j"]
+font = SubResource("FontVariation_ljlk5")
+font_size = 60
+font_color = Color(0.94902, 0.964706, 1, 1)
+
+[node name="CreditsMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_ffjy2")
+
+[node name="TopLabel" type="Label" parent="."]
+layout_mode = 2
+offset_left = 40.0
+offset_right = 240.0
+offset_bottom = 126.0
+text = "Credits"
+label_settings = SubResource("LabelSettings_x7c5j")
+
+[node name="Scroll" type="ScrollContainer" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 0.2
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 40.0
+offset_right = -40.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ItemStack" type="VBoxContainer" parent="Scroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 80
+
+[node name="Programming" parent="Scroll/ItemStack" instance=ExtResource("3_gqm8p")]
+layout_mode = 2
+descriptor = "Programming"
+credited_name = "Fr75s"
+
+[node name="Art" parent="Scroll/ItemStack" instance=ExtResource("3_gqm8p")]
+layout_mode = 2
+descriptor = "Art"
+credited_name = "Fr75s"
+
+[node name="SFX" parent="Scroll/ItemStack" instance=ExtResource("3_gqm8p")]
+layout_mode = 2
+descriptor = "Sound Effects"
+credited_name = "Kenney"
+
+[node name="Original" parent="Scroll/ItemStack" instance=ExtResource("3_gqm8p")]
+layout_mode = 2
+descriptor = "Original Game"
+credited_name = "Marsha Jean Falco; SET Enterprises Inc."
+
+[node name="BackButton" type="TextureButton" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 16.0
+offset_bottom = -16.0
+grow_vertical = 0
+scale = Vector2(0.15, 0.15)
+pivot_offset = Vector2(0, 256)
+mouse_default_cursor_shape = 2
+texture_normal = ExtResource("5_42qyd")
+
+[connection signal="pressed" from="BackButton" to="." method="_on_back_button_pressed"]

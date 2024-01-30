@@ -1,0 +1,44 @@
+[gd_scene load_steps=7 format=3 uid="uid://dubepth7oe6l6"]
+
+[ext_resource type="FontFile" uid="uid://b612p0xldmvjo" path="res://assets/font/OutfitVariable.ttf" id="1_bjr0n"]
+[ext_resource type="Script" path="res://scenes/ui/components/credit.gd" id="1_sbm3v"]
+
+[sub_resource type="FontVariation" id="FontVariation_xfkc2"]
+base_font = ExtResource("1_bjr0n")
+variation_opentype = {
+2003265652: 750
+}
+
+[sub_resource type="LabelSettings" id="LabelSettings_2x6ly"]
+font = SubResource("FontVariation_xfkc2")
+
+[sub_resource type="FontVariation" id="FontVariation_ejebp"]
+base_font = ExtResource("1_bjr0n")
+variation_opentype = {
+2003265652: 400
+}
+
+[sub_resource type="LabelSettings" id="LabelSettings_2r7ft"]
+font = SubResource("FontVariation_ejebp")
+font_size = 24
+
+[node name="Credit" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_sbm3v")
+
+[node name="Descriptor" type="Label" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+text = "Descriptor"
+label_settings = SubResource("LabelSettings_2x6ly")
+
+[node name="Name" type="Label" parent="."]
+layout_mode = 0
+offset_top = 24.0
+offset_right = 288.0
+offset_bottom = 55.0
+text = "Name"
+label_settings = SubResource("LabelSettings_2r7ft")
+autowrap_mode = 2

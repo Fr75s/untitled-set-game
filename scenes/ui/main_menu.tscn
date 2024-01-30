@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://bvb04apxrqn3i"]
+[gd_scene load_steps=10 format=3 uid="uid://bvb04apxrqn3i"]
 
 [ext_resource type="Script" path="res://scripts/main_menu.gd" id="1_y1vn3"]
 [ext_resource type="Texture2D" uid="uid://brxviyjklsfkl" path="res://assets/ui/logo.png" id="2_y04rs"]
@@ -8,6 +8,7 @@
 [ext_resource type="Texture2D" uid="uid://db0366i5pujo2" path="res://assets/ui/menu_buttons/speedrun.png" id="6_xfd8c"]
 [ext_resource type="Texture2D" uid="uid://bu2o265slpdlc" path="res://assets/ui/menu_buttons/multiplayer.png" id="7_5h24g"]
 [ext_resource type="Texture2D" uid="uid://drlp212vntioj" path="res://assets/ui/settings_to.png" id="7_yex4l"]
+[ext_resource type="Texture2D" uid="uid://dkyxforl0m0q5" path="res://assets/ui/credits.svg" id="9_gmlfo"]
 
 [node name="MainMenu" type="Control"]
 layout_mode = 3
@@ -56,6 +57,7 @@ back_image = ExtResource("5_gvxxn")
 back_color = Color(0.666667, 0.454902, 1, 1)
 
 [node name="MultiButton" parent="." instance=ExtResource("2_y7wvh")]
+visible = false
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.225
@@ -73,16 +75,34 @@ back_color = Color(0.0862745, 0.0901961, 0.101961, 1)
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 1.0
+anchor_top = 1.0
 anchor_right = 1.0
-offset_top = 16.0
+anchor_bottom = 1.0
 offset_right = -16.0
+offset_bottom = -16.0
 grow_horizontal = 0
+grow_vertical = 0
 scale = Vector2(0.15, 0.15)
-pivot_offset = Vector2(256, 0)
+pivot_offset = Vector2(256, 256)
 mouse_default_cursor_shape = 2
 texture_normal = ExtResource("7_yex4l")
+stretch_mode = 0
+
+[node name="CreditsButton" type="TextureButton" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 16.0
+offset_bottom = -16.0
+grow_vertical = 0
+scale = Vector2(0.15, 0.15)
+pivot_offset = Vector2(0, 256)
+mouse_default_cursor_shape = 2
+texture_normal = ExtResource("9_gmlfo")
 stretch_mode = 0
 
 [connection signal="action_taken" from="SingleButton" to="." method="_on_single_button_action_taken"]
 [connection signal="action_taken" from="SpeedButton" to="." method="_on_speed_button_action_taken"]
 [connection signal="pressed" from="SettingsButton" to="." method="_on_settings_button_pressed"]
+[connection signal="pressed" from="CreditsButton" to="." method="_on_credits_button_pressed"]

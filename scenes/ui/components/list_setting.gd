@@ -9,6 +9,8 @@ extends Control
 var setting_list
 var setting_list_index
 
+signal setting_changed
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	setting_list = global.setting_options[setting_list_id]
@@ -31,6 +33,7 @@ func _on_list_left_button_pressed():
 		setting_list_index = len(setting_list) - 1
 	
 	global.settings[setting_id] = setting_list[setting_list_index]
+	setting_changed.emit(setting_id, setting_list[setting_list_index])
 	update_display()
 
 func _on_list_right_button_pressed():
@@ -42,4 +45,5 @@ func _on_list_right_button_pressed():
 		setting_list_index = 0
 	
 	global.settings[setting_id] = setting_list[setting_list_index]
+	setting_changed.emit(setting_id, setting_list[setting_list_index])
 	update_display()

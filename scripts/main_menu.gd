@@ -16,6 +16,10 @@ func _on_settings_button_pressed():
 	print("To the settings")
 	get_tree().change_scene_to_file("res://scenes/ui/settings_menu.tscn")
 
+func _on_credits_button_pressed():
+	print("To the credits")
+	get_tree().change_scene_to_file("res://scenes/ui/credits_menu.tscn")
+
 
 
 func _on_single_button_action_taken():
