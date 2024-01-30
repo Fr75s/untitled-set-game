@@ -3,3 +3,4 @@
 *.import
 
 assets/cards/extra
+exports/*

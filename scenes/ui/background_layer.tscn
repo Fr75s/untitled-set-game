@@ -1,0 +1,15 @@
+[gd_scene load_steps=2 format=3 uid="uid://cb00k13cp3ht4"]
+
+[ext_resource type="Texture2D" uid="uid://pj500g3f1fgn" path="res://assets/background.svg" id="1_qi3xo"]
+
+[node name="BackgroundLayer" type="CanvasLayer"]
+layer = -1
+
+[node name="Background" type="TextureRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_qi3xo")
+expand_mode = 1

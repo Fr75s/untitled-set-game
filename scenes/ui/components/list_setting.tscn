@@ -1,14 +1,18 @@
-[gd_scene load_steps=9 format=3 uid="uid://bech8hkpv74it"]
+[gd_scene load_steps=12 format=3 uid="uid://bech8hkpv74it"]
 
 [ext_resource type="FontFile" uid="uid://b612p0xldmvjo" path="res://assets/font/OutfitVariable.ttf" id="2_kt8so"]
 [ext_resource type="Script" path="res://scenes/ui/components/list_setting.gd" id="2_ugbsn"]
 [ext_resource type="AudioStream" uid="uid://dmrnk4duhjju1" path="res://assets/sfx/select_ui.ogg" id="4_wtqdd"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_7hivy"]
 
 [sub_resource type="FontVariation" id="FontVariation_lu8a6"]
 base_font = ExtResource("2_kt8so")
 variation_opentype = {
 2003265652: 400
 }
+spacing_top = 5
+spacing_bottom = 5
 
 [sub_resource type="LabelSettings" id="LabelSettings_i25x8"]
 font = SubResource("FontVariation_lu8a6")
@@ -21,88 +25,103 @@ corner_radius_top_right = 4
 corner_radius_bottom_right = 4
 corner_radius_bottom_left = 4
 
-[sub_resource type="FontVariation" id="FontVariation_f4lci"]
+[sub_resource type="FontVariation" id="FontVariation_pvv3r"]
 base_font = ExtResource("2_kt8so")
 variation_opentype = {
 2003265652: 400
 }
 
+[sub_resource type="FontVariation" id="FontVariation_f4lci"]
+base_font = ExtResource("2_kt8so")
+variation_opentype = {
+2003265652: 500
+}
+
 [sub_resource type="LabelSettings" id="LabelSettings_hngms"]
 line_spacing = -4.0
 font = SubResource("FontVariation_f4lci")
-font_size = 18
+font_size = 24
 
-[node name="ListSetting" type="Control"]
-layout_mode = 3
-anchors_preset = 10
+[sub_resource type="FontVariation" id="FontVariation_mbvln"]
+base_font = ExtResource("2_kt8so")
+variation_opentype = {
+2003265652: 400
+}
+
+[node name="ListSetting" type="Panel"]
+anchors_preset = 15
 anchor_right = 1.0
+anchor_bottom = 1.0
 grow_horizontal = 2
+grow_vertical = 2
 size_flags_stretch_ratio = 0.8
+theme_override_styles/panel = SubResource("StyleBoxEmpty_7hivy")
 script = ExtResource("2_ugbsn")
 
 [node name="SettingName" type="Label" parent="."]
 layout_mode = 1
-anchors_preset = 4
+anchors_preset = -1
+anchor_left = 0.5
 anchor_top = 0.5
+anchor_right = 0.5
 anchor_bottom = 0.5
-offset_top = -17.0
-offset_right = 480.0
-offset_bottom = 17.0
+offset_bottom = -50.0
+grow_horizontal = 2
 grow_vertical = 2
 text = "Setting Name"
 label_settings = SubResource("LabelSettings_i25x8")
+horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="ListContainer" type="Control" parent="."]
 layout_mode = 1
-anchors_preset = 6
-anchor_left = 1.0
+anchors_preset = 8
+anchor_left = 0.5
 anchor_top = 0.5
-anchor_right = 1.0
+anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -480.0
-grow_horizontal = 0
-grow_vertical = 2
-
-[node name="ListLeftButton" type="Button" parent="ListContainer"]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.65
-anchor_top = 0.5
-anchor_right = 0.65
-anchor_bottom = 0.5
-offset_left = -12.0
-offset_top = -15.5
-offset_right = 12.0
-offset_bottom = 15.5
+offset_left = -240.0
+offset_top = 40.0
+offset_right = 240.0
 grow_horizontal = 2
 grow_vertical = 2
-mouse_default_cursor_shape = 2
-text = "←"
-flat = true
 
-[node name="ListLeftButtonBG" type="Panel" parent="ListContainer/ListLeftButton"]
+[node name="ListLeftButtonBG" type="Panel" parent="ListContainer"]
 z_index = -2
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.25
+anchor_right = 0.25
+offset_left = -64.0
+offset_top = -48.0
+offset_right = 16.0
+offset_bottom = 16.0
+grow_horizontal = 0
+grow_vertical = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_0do8q")
+
+[node name="ListLeftButton" type="Button" parent="ListContainer/ListLeftButtonBG"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-mouse_filter = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_0do8q")
+mouse_default_cursor_shape = 2
+theme_override_fonts/font = SubResource("FontVariation_pvv3r")
+theme_override_font_sizes/font_size = 40
+text = "←"
+flat = true
 
 [node name="ListDisplay" type="Label" parent="ListContainer"]
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 0.7
-anchor_top = 0.5
-anchor_right = 0.925
-anchor_bottom = 1.0
-offset_left = -1.0
-offset_top = -25.0
-offset_bottom = 25.0
-grow_horizontal = 0
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -75.0
+offset_right = 75.0
+grow_horizontal = 2
 grow_vertical = 2
 size_flags_vertical = 1
 label_settings = SubResource("LabelSettings_hngms")
@@ -110,36 +129,36 @@ horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 2
 
-[node name="ListRightButton" type="Button" parent="ListContainer"]
+[node name="ListRightButtonBG" type="Panel" parent="ListContainer"]
+z_index = -2
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 0.975
-anchor_top = 0.5
-anchor_right = 0.975
-anchor_bottom = 0.5
-offset_left = -12.0
-offset_top = -15.5
-offset_right = 12.0
-offset_bottom = 15.5
+anchor_left = 0.75
+anchor_right = 0.75
+offset_left = -16.0
+offset_top = -48.0
+offset_right = 64.0
+offset_bottom = 16.0
 grow_horizontal = 2
 grow_vertical = 2
-mouse_default_cursor_shape = 2
-text = "→"
-flat = true
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_0do8q")
 
-[node name="ListRightButtonBG" type="Panel" parent="ListContainer/ListRightButton"]
-z_index = -2
+[node name="ListRightButton" type="Button" parent="ListContainer/ListRightButtonBG"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-mouse_filter = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_0do8q")
+mouse_default_cursor_shape = 2
+theme_override_fonts/font = SubResource("FontVariation_mbvln")
+theme_override_font_sizes/font_size = 40
+text = "→"
+flat = true
 
 [node name="ActionPlayer" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("4_wtqdd")
 
-[connection signal="pressed" from="ListContainer/ListLeftButton" to="." method="_on_list_left_button_pressed"]
-[connection signal="pressed" from="ListContainer/ListRightButton" to="." method="_on_list_right_button_pressed"]
+[connection signal="pressed" from="ListContainer/ListLeftButtonBG/ListLeftButton" to="." method="_on_list_left_button_pressed"]
+[connection signal="pressed" from="ListContainer/ListRightButtonBG/ListRightButton" to="." method="_on_list_right_button_pressed"]

@@ -2,9 +2,7 @@ extends Button
 
 @onready var global = get_node("/root/Globals")
 
-@export var front_image: Texture2D
-@export var back_image: Texture2D
-
+@export var label: String = ""
 @export var back_color: Color = Color("#f2f6ff")
 
 signal action_taken
@@ -12,20 +10,20 @@ signal action_taken
 var focused: bool = false
 
 func _ready():
-	# Prepare Textures
-	$ButtonImage.texture = front_image
-	$BackImage.texture = back_image
-	
+	$Front/ButtonLabel.text = label
 	update_back_color()
 
+# Updates the StyleBox override on the back panel.
 func update_back_color():
-	$BackImage.modulate = back_color
+	var back_stylebox: StyleBoxFlat = $Back.get_theme_stylebox("panel").duplicate()
+	back_stylebox.set("bg_color", back_color)
+	$Back.add_theme_stylebox_override("panel", back_stylebox)
 
 func _on_button_image_item_rect_changed():
 	# Set pivot
-	var height = $ButtonImage.size.y
+	var height = $Front.size.y
 	var radius = height * (30.0 / 400.0)
-	$ButtonImage.pivot_offset = Vector2(radius, height - radius)
+	$Front.pivot_offset = Vector2(radius, height - radius)
 
 
 
@@ -37,10 +35,10 @@ func toggle_focus(to: bool):
 	var tween = create_tween()
 	tween.set_trans(Tween.TRANS_QUAD)
 	if !to:
-		tween.tween_property($ButtonImage, "rotation_degrees", 0, tween_duration)
+		tween.tween_property($Front, "rotation_degrees", 0, tween_duration)
 		focused = false
 	else:
-		tween.tween_property($ButtonImage, "rotation_degrees", -1.5, tween_duration)
+		tween.tween_property($Front, "rotation_degrees", -1.5, tween_duration)
 		focused = true
 		
 		# Delay triggering action

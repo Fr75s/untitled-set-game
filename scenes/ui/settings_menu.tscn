@@ -1,10 +1,11 @@
-[gd_scene load_steps=8 format=3 uid="uid://c5sondoin7rd4"]
+[gd_scene load_steps=10 format=3 uid="uid://c5sondoin7rd4"]
 
 [ext_resource type="Script" path="res://scenes/ui/settings_menu.gd" id="1_v4xd3"]
 [ext_resource type="FontFile" uid="uid://b612p0xldmvjo" path="res://assets/font/OutfitVariable.ttf" id="1_xwg1r"]
 [ext_resource type="Texture2D" uid="uid://hduroyyibmnp" path="res://assets/ui/settings_back.png" id="3_d32ra"]
 [ext_resource type="PackedScene" uid="uid://b1fchbwkp3kw7" path="res://scenes/ui/components/toggle_setting.tscn" id="3_sjjq1"]
 [ext_resource type="PackedScene" uid="uid://bech8hkpv74it" path="res://scenes/ui/components/list_setting.tscn" id="4_mjlxk"]
+[ext_resource type="PackedScene" uid="uid://cb00k13cp3ht4" path="res://scenes/ui/background_layer.tscn" id="6_14g1p"]
 
 [sub_resource type="FontVariation" id="FontVariation_6cmt3"]
 base_font = ExtResource("1_xwg1r")
@@ -20,6 +21,21 @@ font = SubResource("FontVariation_6cmt3")
 font_size = 60
 font_color = Color(0.94902, 0.964706, 1, 1)
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_78yv3"]
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+expand_margin_left = 10.0
+expand_margin_top = 10.0
+expand_margin_right = 10.0
+expand_margin_bottom = 10.0
+
 [node name="SettingsMenu" type="Control"]
 layout_mode = 3
 anchors_preset = 15
@@ -29,61 +45,117 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_v4xd3")
 
-[node name="Scroll" type="ScrollContainer" parent="."]
+[node name="TopLabel" type="Label" parent="."]
 layout_mode = 1
 anchors_preset = -1
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 40.0
-offset_right = -40.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="ItemStack" type="VBoxContainer" parent="Scroll"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-theme_override_constants/separation = 50
-
-[node name="TopLabel" type="Label" parent="Scroll/ItemStack"]
-layout_mode = 2
+anchor_left = 0.1
+anchor_right = 0.9
+offset_bottom = 126.0
 text = "Settings"
 label_settings = SubResource("LabelSettings_5yvcq")
 
-[node name="MuteAudio" parent="Scroll/ItemStack" instance=ExtResource("3_sjjq1")]
+[node name="MuteSFX" parent="." instance=ExtResource("3_sjjq1")]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.25
+anchor_top = 1.0
+anchor_right = 0.75
+offset_top = -400.0
+offset_bottom = -300.0
+grow_vertical = 0
+setting_name = "Mute Sounds"
+setting_id = "mute_sfx"
+
+[node name="Colorscheme" parent="." instance=ExtResource("4_mjlxk")]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.25
+anchor_top = 1.0
+anchor_right = 0.75
+offset_top = -275.0
+offset_bottom = -175.0
+grow_vertical = 0
+setting_name = "Colorscheme"
+setting_id = "current_colors"
+setting_list_id = "colors"
+
+[node name="ItemStack" type="VBoxContainer" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.425
+anchor_right = 0.5
+anchor_bottom = 0.425
+offset_top = -150.0
+offset_bottom = 150.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(1.25, 1.25)
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 100
+alignment = 2
+
+[node name="MuteAudio" parent="ItemStack" instance=ExtResource("3_sjjq1")]
 visible = false
 layout_mode = 2
 setting_name = "Mute Audio"
 setting_id = "mute_audio"
 
-[node name="MuteMusic" parent="Scroll/ItemStack" instance=ExtResource("3_sjjq1")]
+[node name="MuteMusic" parent="ItemStack" instance=ExtResource("3_sjjq1")]
 visible = false
 layout_mode = 2
 setting_name = "Mute Music"
 setting_id = "mute_music"
 
-[node name="MuteSFX" parent="Scroll/ItemStack" instance=ExtResource("3_sjjq1")]
-layout_mode = 2
-setting_name = "Mute Sounds"
-setting_id = "mute_sfx"
-
-[node name="Colorscheme" parent="Scroll/ItemStack" instance=ExtResource("4_mjlxk")]
-layout_mode = 2
-setting_name = "Colorscheme"
-setting_id = "current_colors"
-setting_list_id = "colors"
-
 [node name="BackButton" type="TextureButton" parent="."]
 layout_mode = 1
 anchors_preset = -1
-anchor_top = 1.0
-anchor_bottom = 1.0
-offset_left = 16.0
+anchor_top = 0.95
+anchor_bottom = 0.95
+offset_left = 24.0
 offset_bottom = -16.0
 grow_vertical = 0
-scale = Vector2(0.15, 0.15)
+scale = Vector2(0.2, 0.2)
 pivot_offset = Vector2(0, 256)
 mouse_default_cursor_shape = 2
 texture_normal = ExtResource("3_d32ra")
 
+[node name="ColorDisplay" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.25
+anchor_top = 0.95
+anchor_right = 0.75
+anchor_bottom = 0.95
+offset_bottom = -42.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_constants/separation = 30
+alignment = 1
+
+[node name="Color0" type="Panel" parent="ColorDisplay"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_78yv3")
+
+[node name="Color1" type="Panel" parent="ColorDisplay"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_78yv3")
+
+[node name="Color2" type="Panel" parent="ColorDisplay"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_78yv3")
+
+[node name="Color3" type="Panel" parent="ColorDisplay"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_78yv3")
+
+[node name="Color4" type="Panel" parent="ColorDisplay"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_78yv3")
+
+[node name="BackgroundLayer" parent="." instance=ExtResource("6_14g1p")]
+
+[connection signal="setting_changed" from="Colorscheme" to="." method="_on_colorscheme_setting_changed"]
 [connection signal="pressed" from="BackButton" to="." method="_on_back_button_pressed"]

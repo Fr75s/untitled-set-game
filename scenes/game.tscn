@@ -1,18 +1,18 @@
-[gd_scene load_steps=29 format=3 uid="uid://ggbue45e510n"]
+[gd_scene load_steps=34 format=3 uid="uid://ggbue45e510n"]
 
 [ext_resource type="Script" path="res://scripts/game.gd" id="1_6rj2t"]
 [ext_resource type="PackedScene" uid="uid://dwlvgy2g3ttio" path="res://scenes/objects/card.tscn" id="2_g428w"]
-[ext_resource type="Texture2D" uid="uid://pj500g3f1fgn" path="res://assets/background.svg" id="3_5j4mx"]
+[ext_resource type="PackedScene" uid="uid://cb00k13cp3ht4" path="res://scenes/ui/background_layer.tscn" id="3_pon5i"]
 [ext_resource type="FontFile" uid="uid://b612p0xldmvjo" path="res://assets/font/OutfitVariable.ttf" id="4_ug63r"]
 [ext_resource type="FontFile" uid="uid://br6rlljmte24h" path="res://assets/font/JetBrainsMono.ttf" id="4_vk20l"]
 [ext_resource type="Texture2D" uid="uid://hduroyyibmnp" path="res://assets/ui/settings_back.png" id="4_vopya"]
 [ext_resource type="AudioStream" uid="uid://d2763j6qe8j2f" path="res://assets/sfx/correct.ogg" id="5_681r2"]
-[ext_resource type="Texture2D" uid="uid://cgn7bt8ette4m" path="res://assets/ui/menu_buttons/begin_game.png" id="5_wriej"]
-[ext_resource type="Texture2D" uid="uid://cyfjpl6h5cufc" path="res://assets/ui/menu_buttons/begin_game_p.png" id="6_74h2h"]
+[ext_resource type="PackedScene" uid="uid://ed0oxa1u4xkq" path="res://scenes/ui/components/title_screen_button.tscn" id="6_43t7y"]
 [ext_resource type="AudioStream" uid="uid://ctoxlvjmscxsa" path="res://assets/sfx/incorrect.ogg" id="6_7663o"]
 [ext_resource type="AudioStream" uid="uid://beb2feidydg0u" path="res://assets/sfx/win.ogg" id="7_b5iy3"]
 [ext_resource type="PackedScene" uid="uid://bech8hkpv74it" path="res://scenes/ui/components/list_setting.tscn" id="7_jlv6a"]
 [ext_resource type="AudioStream" uid="uid://dmrnk4duhjju1" path="res://assets/sfx/select_ui.ogg" id="8_p4d23"]
+[ext_resource type="StyleBox" uid="uid://dds8scpkhr0hj" path="res://scenes/ui/theme/finish_button.tres" id="10_0a2hf"]
 [ext_resource type="AudioStream" uid="uid://tafsng6myug0" path="res://assets/sfx/lose.ogg" id="14_arb51"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_jtryd"]
@@ -75,6 +75,16 @@ variation_opentype = {
 font = SubResource("FontVariation_b7nu4")
 font_size = 42
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hk1oi"]
+bg_color = Color(0.14902, 0.156863, 0.176471, 1)
+skew = Vector2(0.2, 0)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+expand_margin_top = 10.0
+expand_margin_bottom = 10.0
+
 [sub_resource type="LabelSettings" id="LabelSettings_y76on"]
 font = ExtResource("4_vk20l")
 font_size = 20
@@ -90,21 +100,57 @@ spacing_glyph = 1
 font = SubResource("FontVariation_swgte")
 font_size = 28
 
+[sub_resource type="FontVariation" id="FontVariation_b2li3"]
+base_font = ExtResource("4_ug63r")
+variation_opentype = {
+2003265652: 400
+}
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_x5klw"]
+bg_color = Color(0.192157, 0.2, 0.227451, 1)
+skew = Vector2(0.1, 0)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 2
+border_color = Color(0.94902, 0.964706, 1, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+expand_margin_left = 5.0
+expand_margin_top = 5.0
+expand_margin_right = 5.0
+expand_margin_bottom = 5.0
+
+[sub_resource type="FontVariation" id="FontVariation_7ag8h"]
+base_font = ExtResource("4_ug63r")
+variation_opentype = {
+2003265652: 400
+}
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_aeo35"]
+bg_color = Color(0.192157, 0.2, 0.227451, 1)
+skew = Vector2(0.1, 0)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 2
+border_color = Color(0.94902, 0.964706, 1, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+expand_margin_left = 5.0
+expand_margin_top = 5.0
+expand_margin_right = 5.0
+expand_margin_bottom = 5.0
+
 [node name="Game" type="Node2D"]
 script = ExtResource("1_6rj2t")
 card_scene = ExtResource("2_g428w")
 
-[node name="BackgroundLayer" type="CanvasLayer" parent="."]
-layer = -1
-
-[node name="Background" type="TextureRect" parent="BackgroundLayer"]
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("3_5j4mx")
-expand_mode = 1
+[node name="BackgroundLayer" parent="." instance=ExtResource("3_pon5i")]
 
 [node name="CardContainer" type="Node2D" parent="."]
 
@@ -307,18 +353,14 @@ label_settings = SubResource("LabelSettings_4w483")
 horizontal_alignment = 1
 vertical_alignment = 2
 
-[node name="StartButton" type="TextureButton" parent="UILayer/PregameScreen"]
+[node name="StartButton" parent="UILayer/PregameScreen" instance=ExtResource("6_43t7y")]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.25
-anchor_top = 0.85
+anchor_top = 0.825
 anchor_right = 0.75
-anchor_bottom = 1.0
-grow_horizontal = 2
-texture_normal = ExtResource("5_wriej")
-texture_pressed = ExtResource("6_74h2h")
-ignore_texture_size = true
-stretch_mode = 4
+anchor_bottom = 0.925
+label = "Begin"
 
 [node name="SettingsContainer" type="VBoxContainer" parent="UILayer/PregameScreen"]
 layout_mode = 1
@@ -342,7 +384,6 @@ layout_mode = 1
 anchors_preset = 14
 anchor_top = 0.5
 anchor_bottom = 0.5
-grow_vertical = 2
 setting_name = "CPU Difficulty"
 setting_id = "cpu_difficulty"
 setting_list_id = "cpu_difficulty"
@@ -356,18 +397,19 @@ layout_mode = 1
 anchors_preset = 14
 anchor_top = 0.5
 anchor_bottom = 0.5
-grow_vertical = 2
 setting_name = "Mode"
 setting_id = "speedrun_mode"
 setting_list_id = "speedrun_mode"
 
 [node name="RecordTime" type="Label" parent="UILayer/PregameScreen/SettingsContainer/SpeedrunSettings"]
 layout_mode = 0
-offset_top = 40.0
+offset_top = 100.0
 offset_right = 384.0
-offset_bottom = 63.0
+offset_bottom = 127.0
+theme_override_styles/normal = SubResource("StyleBoxFlat_hk1oi")
 text = "Record Time: --:--.---"
 label_settings = SubResource("LabelSettings_y76on")
+horizontal_alignment = 1
 
 [node name="EndScreen" type="Control" parent="UILayer"]
 visible = false
@@ -381,59 +423,60 @@ mouse_filter = 1
 
 [node name="FinishLabel" type="Label" parent="UILayer/EndScreen"]
 layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
+anchors_preset = -1
+anchor_left = 0.2
 anchor_top = 0.5
-anchor_right = 0.5
+anchor_right = 0.8
 anchor_bottom = 0.5
-offset_left = -117.0
-offset_top = -13.0
-offset_right = 117.0
-offset_bottom = 13.0
+offset_left = -0.5
+offset_right = 0.5
 grow_horizontal = 2
-grow_vertical = 2
+grow_vertical = 0
 text = "You made it through the deck!"
 label_settings = SubResource("LabelSettings_2uoi7")
 horizontal_alignment = 1
+autowrap_mode = 2
 
 [node name="MainMenuButton" type="Button" parent="UILayer/EndScreen"]
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -4.0
-offset_top = 175.0
-offset_right = 4.0
-offset_bottom = 4.0
+anchor_left = 0.2
+anchor_top = 0.725
+anchor_right = 0.8
+anchor_bottom = 0.775
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_fonts/font = SubResource("FontVariation_b2li3")
+theme_override_styles/normal = ExtResource("10_0a2hf")
+theme_override_styles/hover = ExtResource("10_0a2hf")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_x5klw")
+theme_override_styles/focus = ExtResource("10_0a2hf")
 text = "Back to the main menu"
 
 [node name="RestartButton" type="Button" parent="UILayer/EndScreen"]
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -88.5
-offset_top = 75.0
-offset_right = 88.5
-offset_bottom = 15.5
+anchor_left = 0.2
+anchor_top = 0.65
+anchor_right = 0.8
+anchor_bottom = 0.7
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_fonts/font = SubResource("FontVariation_7ag8h")
+theme_override_styles/normal = ExtResource("10_0a2hf")
+theme_override_styles/hover = ExtResource("10_0a2hf")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_aeo35")
+theme_override_styles/focus = ExtResource("10_0a2hf")
 text = "Restart This Mode"
 
 [node name="BackButton" type="TextureButton" parent="UILayer"]
 anchors_preset = -1
-anchor_top = 1.0
-anchor_bottom = 1.0
-offset_left = 16.0
+anchor_top = 0.95
+anchor_bottom = 0.95
+offset_left = 24.0
 offset_bottom = -16.0
 grow_vertical = 0
-scale = Vector2(0.15, 0.15)
+scale = Vector2(0.2, 0.2)
 pivot_offset = Vector2(0, 256)
 mouse_default_cursor_shape = 2
 texture_normal = ExtResource("4_vopya")
@@ -462,7 +505,7 @@ volume_db = -5.0
 [node name="CPUActTimer" type="Timer" parent="."]
 wait_time = 0.5
 
-[connection signal="pressed" from="UILayer/PregameScreen/StartButton" to="." method="_on_start_button_pressed"]
+[connection signal="action_taken" from="UILayer/PregameScreen/StartButton" to="." method="_on_start_button_pressed"]
 [connection signal="setting_changed" from="UILayer/PregameScreen/SettingsContainer/SpeedrunSettings/SpeedrunModeSetting" to="." method="_on_speedrun_mode_setting_setting_changed"]
 [connection signal="pressed" from="UILayer/EndScreen/MainMenuButton" to="." method="_on_main_menu_button_pressed"]
 [connection signal="pressed" from="UILayer/EndScreen/RestartButton" to="." method="_on_restart_button_pressed"]

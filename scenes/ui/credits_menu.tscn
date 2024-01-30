@@ -1,9 +1,10 @@
-[gd_scene load_steps=7 format=3 uid="uid://bfi7xnnqexehd"]
+[gd_scene load_steps=8 format=3 uid="uid://bfi7xnnqexehd"]
 
 [ext_resource type="Script" path="res://scripts/credits_menu.gd" id="1_ffjy2"]
 [ext_resource type="FontFile" uid="uid://b612p0xldmvjo" path="res://assets/font/OutfitVariable.ttf" id="2_2571u"]
 [ext_resource type="PackedScene" uid="uid://dubepth7oe6l6" path="res://scenes/ui/components/credit.tscn" id="3_gqm8p"]
 [ext_resource type="Texture2D" uid="uid://hduroyyibmnp" path="res://assets/ui/settings_back.png" id="5_42qyd"]
+[ext_resource type="PackedScene" uid="uid://cb00k13cp3ht4" path="res://scenes/ui/background_layer.tscn" id="5_xk5hr"]
 
 [sub_resource type="FontVariation" id="FontVariation_ljlk5"]
 base_font = ExtResource("2_2571u")
@@ -76,14 +77,16 @@ credited_name = "Marsha Jean Falco; SET Enterprises Inc."
 [node name="BackButton" type="TextureButton" parent="."]
 layout_mode = 1
 anchors_preset = -1
-anchor_top = 1.0
-anchor_bottom = 1.0
-offset_left = 16.0
+anchor_top = 0.95
+anchor_bottom = 0.95
+offset_left = 24.0
 offset_bottom = -16.0
 grow_vertical = 0
-scale = Vector2(0.15, 0.15)
+scale = Vector2(0.2, 0.2)
 pivot_offset = Vector2(0, 256)
 mouse_default_cursor_shape = 2
 texture_normal = ExtResource("5_42qyd")
+
+[node name="BackgroundLayer" parent="." instance=ExtResource("5_xk5hr")]
 
 [connection signal="pressed" from="BackButton" to="." method="_on_back_button_pressed"]

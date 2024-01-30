@@ -1,38 +1,51 @@
-[gd_scene load_steps=6 format=3 uid="uid://b1fchbwkp3kw7"]
+[gd_scene load_steps=12 format=3 uid="uid://b1fchbwkp3kw7"]
 
 [ext_resource type="Script" path="res://scenes/ui/components/toggle_setting.gd" id="1_2m1ym"]
 [ext_resource type="FontFile" uid="uid://b612p0xldmvjo" path="res://assets/font/OutfitVariable.ttf" id="1_hqx5x"]
 [ext_resource type="AudioStream" uid="uid://dmrnk4duhjju1" path="res://assets/sfx/select_ui.ogg" id="3_4dee0"]
+[ext_resource type="Texture2D" uid="uid://c0y04bew87850" path="res://assets/ui/toggle_on.svg" id="3_ra6e6"]
+[ext_resource type="Texture2D" uid="uid://6lf8ftsq4120" path="res://assets/ui/toggle_off.svg" id="4_odqlb"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_2frmq"]
 
 [sub_resource type="FontVariation" id="FontVariation_lu8a6"]
 base_font = ExtResource("1_hqx5x")
 variation_opentype = {
 2003265652: 400
 }
-spacing_top = 10
-spacing_bottom = 10
 
 [sub_resource type="LabelSettings" id="LabelSettings_i25x8"]
 font = SubResource("FontVariation_lu8a6")
 font_size = 24
 
-[node name="ToggleSetting" type="Control"]
-layout_mode = 3
-anchors_preset = 10
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_8vqlu"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_pxsl2"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ito8g"]
+
+[node name="ToggleSetting" type="Panel"]
+anchors_preset = 15
 anchor_right = 1.0
+anchor_bottom = 1.0
 grow_horizontal = 2
+grow_vertical = 2
 size_flags_stretch_ratio = 0.8
+theme_override_styles/panel = SubResource("StyleBoxEmpty_2frmq")
 script = ExtResource("1_2m1ym")
 
 [node name="SettingNameMargins" type="MarginContainer" parent="."]
 layout_mode = 1
-anchors_preset = 4
+anchors_preset = -1
+anchor_left = 0.5
 anchor_top = 0.5
+anchor_right = 0.5
 anchor_bottom = 0.5
-offset_top = -35.5
-offset_right = 144.0
-offset_bottom = 35.5
+offset_bottom = -40.0
+grow_horizontal = 2
 grow_vertical = 2
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_bottom = 10
 
 [node name="SettingName" type="Label" parent="SettingNameMargins"]
 layout_mode = 2
@@ -43,16 +56,19 @@ vertical_alignment = 1
 [node name="Toggle" type="CheckButton" parent="."]
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 0.775
+anchor_left = 0.5
 anchor_top = 0.5
-anchor_right = 0.775
+anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -22.0
-offset_top = -12.0
-offset_right = 22.0
-offset_bottom = 12.0
+offset_top = 10.0
 grow_horizontal = 2
-grow_vertical = 2
+scale = Vector2(0.2, 0.2)
+pivot_offset = Vector2(128, 0)
+theme_override_icons/checked = ExtResource("3_ra6e6")
+theme_override_icons/unchecked = ExtResource("4_odqlb")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_8vqlu")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_pxsl2")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_ito8g")
 
 [node name="ActionPlayer" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("3_4dee0")
